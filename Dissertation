@@ -1,0 +1,119 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
+
+# Simulate IoT sensor data collection
+np.random.seed(42)
+num_students = 100
+num_features = 5
+X = np.random.rand(num_students, num_features)  # Simulated sensor data (e.g., engagement levels, performance metrics)
+y = np.random.rand(num_students) *100  # Simulated student scores
+
+# Split the dataset into training and testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Implement ML algorithm for feedback generation (Random Forest for simplicity)
+model = RandomForestRegressor(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+predictions = model.predict(X_test)
+
+# Calculate the model's effectiveness
+mse = mean_squared_error(y_test, predictions)
+print(f"Mean Squared Error of the Model: {mse:.2f}")
+
+# Simulate an adaptive tutoring system (simplified for this example)
+# Adjusting learning content based on feedback (i.e., student scores prediction)
+adaptation_factor = np.mean(predictions) / 100  # Simplified adaptation logic
+adjusted_learning_content = X_test*  adaptation_factor
+
+# Visualize the original vs adjusted learning content effectiveness
+plt.figure(figsize=(12, 6))
+plt.subplot(1, 2, 1)
+plt.hist(y_test, bins=10, alpha=0.7, label='Original Student Scores')
+plt.xlabel('Scores')
+plt.ylabel('Number of Students')
+plt.title('Original Learning Content Effectiveness')
+plt.legend()
+
+plt.subplot(1, 2, 2)
+plt.hist(adjusted_learning_content.mean(axis=1), bins=10, alpha=0.7, label='Adjusted Content Scores')
+plt.xlabel('Adjusted Scores')
+plt.ylabel('Number of Students')
+plt.title('Adaptive Tutoring System Effectiveness')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
+
+# Seed for reproducibility
+np.random.seed(42)
+
+# Simulate IoT sensor data collection
+num_students = 100
+num_features = 5
+X = np.random.rand(num_students, num_features)  # Simulated sensor data
+y = np.random.rand(num_students) *100  # Simulated student scores
+
+# Split the dataset into training and testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Implement ML algorithm for feedback generation
+model = RandomForestRegressor(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+predictions = model.predict(X_test)
+
+# Calculate and print the model's effectiveness
+mse = mean_squared_error(y_test, predictions)
+print(f"Mean Squared Error of the Model: {mse:.2f}")
+
+# Visualization
+plt.figure(figsize=(18, 10))
+
+# Original vs Adjusted Learning Content Effectiveness
+plt.subplot(2, 3, 1)
+plt.hist(y_test, bins=10, alpha=0.7, label='Original Scores')
+plt.hist(predictions, bins=10, alpha=0.7, label='Predicted Scores')
+plt.xlabel('Scores')
+plt.ylabel('Number of Students')
+plt.title('Effectiveness of Learning Content')
+plt.legend()
+
+# Predicted vs. Actual Scores
+plt.subplot(2, 3, 2)
+plt.scatter(y_test, predictions, alpha=0.7)
+plt.xlabel('Actual Scores')
+plt.ylabel('Predicted Scores')
+plt.title('Predicted vs Actual Scores')
+plt.plot([y.min(), y.max()], [y.min(), y.max()], 'k--', lw=4)
+
+# Feature Importance
+plt.subplot(2, 3, 3)
+importances = model.feature_importances_
+indices = np.argsort(importances)[::-1]
+plt.title('Feature Importances')
+plt.bar(range(X_train.shape[1]), importances[indices], color="r", align="center")
+plt.xticks(range(X_train.shape[1]), indices)
+plt.xlim([-1, X_train.shape[1]])
+
+# Engagement Levels Heatmap - Before
+plt.subplot(2, 3, 4)
+sns.heatmap(X_train[:, :2], cmap="YlGnBu")
+plt.title('Engagement Levels Heatmap - Before')
+
+# Engagement Levels Heatmap - After Adaptation
+adaptation_factor = np.mean(predictions) / 100
+adjusted_engagement = X_test[:, :2] * adaptation_factor
+plt.subplot(2, 3, 5)
+sns.heatmap(adjusted_engagement, cmap="YlGnBu")
+plt.title('Engagement Levels Heatmap - After')
+
+plt.tight_layout()
+plt.show()
